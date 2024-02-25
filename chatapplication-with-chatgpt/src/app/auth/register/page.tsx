@@ -29,23 +29,39 @@ const Register = () => {
                 <label className="block text-sm font-medium text-gray-600">
                     Email
                 </label>
-                <input {...register("email", {
-                    required: "メールアドレスは必須です。",
-                    pattern: {
-                        value: /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-                        message: "不適切なメールアドレスです。",
-                    },
-                })} 
-                type="text"
-                className="mt-1 border-2 rounded-md w-full p-2"
+                <input 
+                    {...register("email", {
+                        required: "メールアドレスは必須です。",
+                        pattern: {
+                            value: /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+                            message: "不適切なメールアドレスです。",
+                        },
+                    })} 
+                    type="text"
+                    className="mt-1 border-2 rounded-md w-full p-2"
                 />
                 {errors.email && (
                     <span className="text-red-600 text-sm">{errors.email.message}</span>
                 )}
             </div>
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Password</label>
-                <input type="text" className="mt-1 border-2 rounded-md w-full p-2"/>
+                <label className="block text-sm font-medium text-gray-600">
+                    Password
+                </label>
+                <input 
+                    {...register("password", {
+                        required: "パスワードは必須です。",
+                        minLength: {
+                            value: 6,
+                            message: "6文字以上入力してください。",
+                        }
+                    })} 
+                    type="text" 
+                    className="mt-1 border-2 rounded-md w-full p-2"
+                />
+                {errors.password && (
+                    <span className="text-red-600 text-sm">{errors.password.message}</span>
+                )}
             </div>
             <div className="flex justify-end">
                 <button type="submit" 
