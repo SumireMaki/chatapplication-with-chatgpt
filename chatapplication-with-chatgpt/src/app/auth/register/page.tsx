@@ -1,6 +1,9 @@
 "use client";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../../firebase";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
     email: string;
@@ -8,15 +11,31 @@ type Inputs = {
 };
 
 const Register = () => {
+
+    const router = useRouter();
+
     const{
         register,
         handleSubmit,
         formState: {errors},
     } = useForm<Inputs>();
-
+    
     const onSubmit: SubmitHandler<Inputs> = async(data) => {
-        console.log(data);
+        await createUserWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            router.push("/auth/login");
+        }).catch((error) => {
+            // console.error(error);
+            // alert(error);
+            if(error.code === "auth/email-already-in-use"){
+                alert("このメールアドレスは既に登録されています。");
+            }else{
+                alert(error.message);
+            }
+        });
     };
+
 
     return (
     <div className="h-screen flex flex-col items-center justify-center">
@@ -56,7 +75,7 @@ const Register = () => {
                             message: "6文字以上入力してください。",
                         }
                     })} 
-                    type="text" 
+                    type="password" 
                     className="mt-1 border-2 rounded-md w-full p-2"
                 />
                 {errors.password && (
